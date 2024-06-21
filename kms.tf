@@ -71,8 +71,8 @@ data "aws_iam_policy_document" "ebs" {
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling", 
-        aws_iam_role.cluster_role.arn,                                                                                                           
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling",
+        aws_iam_role.cluster_role.arn,
       ]
     }
   }
@@ -85,8 +85,8 @@ data "aws_iam_policy_document" "ebs" {
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling", 
-        aws_iam_role.cluster_role.arn,                                                                                                            
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling",
+        aws_iam_role.cluster_role.arn,
       ]
     }
 
@@ -112,7 +112,7 @@ resource "aws_kms_key" "eks" {
 resource "aws_kms_key" "ebs" {
   description             = "Key for ebs"
   deletion_window_in_days = 7
-   policy                  = data.aws_iam_policy_document.ebs.json
+  policy                  = data.aws_iam_policy_document.ebs.json
 }
 
 # resource "aws_kms_alias" "ebs" {
