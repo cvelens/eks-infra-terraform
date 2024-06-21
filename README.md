@@ -1,4 +1,4 @@
-# CSYE 7125 - Advanced Cloud Computing: Infrastructure as Code for AWS EKS
+# CSYE 7125 - Advanced Cloud Computing: Infrastructure as Code for AWS EKS!
 
 This repository contains Terraform code to set up an Amazon EKS (Elastic Kubernetes Service) cluster and its associated infrastructure on AWS.
 
