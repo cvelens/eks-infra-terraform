@@ -170,7 +170,7 @@ variable "disk_size" {
 
 variable "instance_types" {
   type    = list(string)
-  default = ["t3.large"]
+  default = ["t3.xlarge"]
 }
 
 variable "instance_type" {

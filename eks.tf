@@ -48,7 +48,7 @@ module "eks" {
       instance_types  = var.instance_types[*]
       min_size        = var.min_size
       max_size        = var.max_size
-      destired_size   = var.desired_size
+      desired_size    = var.desired_size
       update_config = {
         max_unavailable = var.max_unavailable_number
       }
