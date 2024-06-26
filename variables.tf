@@ -215,3 +215,18 @@ variable "create_cluster_security_group" {
   type    = bool
   default = false
 }
+
+variable "kafka_name" {
+  type    = string
+  default = "kafka"
+}
+
+variable "helm_kafka_repo" {
+  type    = string
+  default = "https://charts.bitnami.com/bitnami"
+}
+
+variable "chart_name" {
+  type    = string
+  default = "kafka"
+}

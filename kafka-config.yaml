@@ -1,0 +1,50 @@
+provisioning:
+  enabled: true
+  topics:
+    - name: cve
+      partitions: 3
+      replicationFactor: 3
+broker:      
+  replicaCount: 3
+  persistence:
+    enabled: true
+    storageClass: ""
+    accessModes:
+      - ReadWriteOnce
+    size: 5Gi
+  resourcesPreset: "large"
+  readinessProbe:
+    initialDelaySeconds: 60
+  autoscaling:
+    hpa:
+      enabled: true
+      minReplicas: 1
+      maxReplicas: 3
+
+controller:      
+  replicaCount: 1
+  persistence:
+    enabled: true
+    storageClass: ""
+    accessModes:
+      - ReadWriteOnce
+    size: 5Gi
+  resourcesPreset: "large"
+  readinessProbe:
+    initialDelaySeconds: 5
+  autoscaling:
+    hpa:
+      enabled: true
+      minReplicas: 1
+      maxReplicas: 3
+
+listeners:
+  client:
+    protocol: plaintext
+  controller:
+    protocol: plaintext
+  interbroker:
+    protocol: plaintext
+  external:
+    protocol: plaintext
+  extraListeners: []
