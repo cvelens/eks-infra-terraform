@@ -58,7 +58,8 @@ module "eks" {
           device_name = "/dev/xvda"
           ebs = {
             volume_size           = 20
-            volume_type           = "gp2"
+            volume_type           = "gp3"
+            iops                  = 5000
             encrypted             = true
             kms_key_id            = aws_kms_key.ebs.arn
             delete_on_termination = true
@@ -74,3 +75,21 @@ module "eks" {
   )
 }
 
+resource "null_resource" "update_kubeconfig" {
+  provisioner "local-exec" {
+    command = <<EOT
+      rm -rf ~/.kube/config
+      aws eks --region ${var.region} update-kubeconfig --name ${var.cluster_name} --profile ${var.profile}
+    EOT
+  }
+
+  depends_on = [helm_release.kafka]
+}
+
+resource "null_resource" "dependency" {
+  provisioner "local-exec" {
+    command = "sleep 5"
+  }
+
+  depends_on = [aws_eip.nat[0], aws_eip.nat[1], aws_eip.nat[2], aws_iam_policy.eks_kms_policy, aws_iam_policy.eks_kms_policy_ebs, aws_iam_role.cluster_role, aws_iam_role.node_role, aws_iam_role_policy_attachment.eks_cluster_role_policy_attachment["AmazonEBSCSIDriverPolicy"], aws_iam_role_policy_attachment.eks_cluster_role_policy_attachment["AmazonEKSClusterPolicy"], aws_iam_role_policy_attachment.eks_cluster_role_policy_attachment["AmazonEKSVPCResourceController"], aws_iam_role_policy_attachment.eks_cluster_role_policy_attachment["AmazonEKS_CNI_Policy"], aws_iam_role_policy_attachment.eks_kms_policy_attachment, aws_iam_role_policy_attachment.eks_kms_policy_attachment_ebs, aws_iam_role_policy_attachment.eks_node_role_policy_attachment["AmazonEBSCSIDriverPolicy"], aws_iam_role_policy_attachment.eks_node_role_policy_attachment["AmazonEC2ContainerRegistryReadOnly"], aws_iam_role_policy_attachment.eks_node_role_policy_attachment["AmazonEKSWorkerNodePolicy"], aws_iam_role_policy_attachment.eks_node_role_policy_attachment["AmazonEKS_CNI_Policy"], aws_internet_gateway.gateway, aws_kms_key.ebs, aws_kms_key.eks, aws_nat_gateway.natgw[0], aws_nat_gateway.natgw[1], aws_nat_gateway.natgw[2], aws_route_table.private_subnet_route_table[0], aws_route_table.private_subnet_route_table[1], aws_route_table.private_subnet_route_table[2], aws_route_table.public_subnet_route_table[0], aws_route_table.public_subnet_route_table[1], aws_route_table.public_subnet_route_table[2], aws_route_table_association.private_subnet[0], aws_route_table_association.private_subnet[1], aws_route_table_association.private_subnet[2], aws_route_table_association.public_subnet[0], aws_route_table_association.public_subnet[1], aws_route_table_association.public_subnet[2], aws_security_group.cluster, aws_security_group.node, aws_security_group_rule.cluster_egress[0], aws_security_group_rule.cluster_ingress[0], aws_security_group_rule.node_egress[0], aws_subnet.private_subnets[0], aws_subnet.private_subnets[1], aws_subnet.private_subnets[2], aws_subnet.public_subnets[0], aws_subnet.public_subnets[1], aws_subnet.public_subnets[2], aws_vpc.main, module.eks]
+}
