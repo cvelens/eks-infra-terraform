@@ -2,7 +2,7 @@ provisioning:
   enabled: true
   topics:
     - name: cve
-      partitions: 3
+      partitions: 6
       replicationFactor: 3
 broker:      
   replicaCount: 3
@@ -11,8 +11,8 @@ broker:
     storageClass: ""
     accessModes:
       - ReadWriteOnce
-    size: 5Gi
-  resourcesPreset: "large"
+    size: 50Gi
+  resourcesPreset: "xlarge"
   readinessProbe:
     initialDelaySeconds: 60
   autoscaling:
@@ -28,8 +28,8 @@ controller:
     storageClass: ""
     accessModes:
       - ReadWriteOnce
-    size: 5Gi
-  resourcesPreset: "large"
+    size: 100Gi
+  resourcesPreset: "xlarge"
   readinessProbe:
     initialDelaySeconds: 5
   autoscaling:
