@@ -19,6 +19,9 @@ module "eks" {
     }
     vpc-cni = {
       most_recent = true
+      configuration_values = jsonencode({
+        enableNetworkPolicy = "true"
+      })
     }
     eks-pod-identity-agent = {
       most_recent = true
@@ -83,7 +86,7 @@ resource "null_resource" "update_kubeconfig" {
     EOT
   }
 
-  depends_on = [helm_release.kafka]
+  depends_on = [kubernetes_namespace.ns2]
 }
 
 resource "null_resource" "dependency" {
@@ -98,5 +101,5 @@ resource "null_resource" "apply_metrics_server" {
   provisioner "local-exec" {
     command = "kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml"
   }
-  depends_on = [ null_resource.update_kubeconfig ]
+  depends_on = [null_resource.update_kubeconfig]
 }

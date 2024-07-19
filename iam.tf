@@ -89,3 +89,66 @@ resource "aws_iam_role_policy_attachment" "eks_node_role_policy_attachment" {
   role       = aws_iam_role.node_role.name
   policy_arn = each.value.arn
 }
+
+data "aws_eks_cluster" "cluster" {
+  name = var.cluster_name
+  depends_on = [null_resource.update_kubeconfig]
+}
+
+resource "aws_iam_policy" "cluster_autoscaler_policy" {
+  name        = "EKSClusterAutoscalerPolicy"
+  description = "IAM policy for EKS Cluster Autoscaler"
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "autoscaling:*",
+          "ec2:*",
+          "cloudwatch:*",
+          "iam:*",
+          "sns:*",
+          "elasticloadbalancing:*"
+        ],
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+data "aws_caller_identity" "infra" {}
+
+resource "aws_iam_role" "cluster_autoscaler_role" {
+  name = "eks-cluster-autoscaler-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Principal = {
+          Service = "eks.amazonaws.com"
+        },
+        Action = "sts:AssumeRole"
+      },
+      {
+        Effect = "Allow",
+        Principal = {
+          Federated = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${replace(data.aws_eks_cluster.cluster.identity.0.oidc.0.issuer, "https://", "")}"
+        },
+        Action = "sts:AssumeRoleWithWebIdentity",
+        Condition = {
+          StringEquals = {
+            "${replace(data.aws_eks_cluster.cluster.identity.0.oidc.0.issuer, "https://", "")}:sub" = "system:serviceaccount:${kubernetes_namespace.ns4.metadata[0].name}:${var.service_account_name}"
+          }
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "cluster_autoscaler_attach" {
+  policy_arn = aws_iam_policy.cluster_autoscaler_policy.arn
+  role       = aws_iam_role.cluster_autoscaler_role.name
+}
