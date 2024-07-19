@@ -56,6 +56,23 @@ resource "kubernetes_namespace" "ns1" {
   depends_on = [null_resource.dependency]
 }
 
+resource "kubernetes_resource_quota" "ns1" {
+  metadata {
+    name      = var.nsquota
+    namespace = kubernetes_namespace.ns1.metadata[0].name
+  }
+
+  spec {
+    hard = {
+      "requests.cpu"    = "2"
+      "requests.memory" = "4Gi"
+      "limits.cpu"      = "8"
+      "limits.memory"   = "24Gi"
+    }
+  }
+  depends_on = [ helm_release.kafka ]
+}
+
 resource "kubernetes_namespace" "ns2" {
   metadata {
     labels = {
@@ -67,6 +84,23 @@ resource "kubernetes_namespace" "ns2" {
   depends_on = [null_resource.dependency]
 }
 
+resource "kubernetes_resource_quota" "ns2" {
+  metadata {
+    name      = var.nsquota
+    namespace = kubernetes_namespace.ns2.metadata[0].name
+  }
+
+  spec {
+    hard = {
+      "requests.cpu"    = "4"
+      "requests.memory" = "8Gi"
+      "limits.cpu"      = "16"
+      "limits.memory"   = "30Gi"
+    }
+  }
+  depends_on = [ helm_release.kafka ]
+}
+
 resource "kubernetes_namespace" "ns3" {
   metadata {
     labels = {
@@ -76,4 +110,49 @@ resource "kubernetes_namespace" "ns3" {
     name = "ns3"
   }
   depends_on = [null_resource.dependency]
+}
+
+resource "kubernetes_resource_quota" "ns3" {
+  metadata {
+    name      = var.nsquota
+    namespace = kubernetes_namespace.ns3.metadata[0].name
+  }
+
+  spec {
+    hard = {
+      "requests.cpu"    = "2"
+      "requests.memory" = "4Gi"
+      "limits.cpu"      = "8"
+      "limits.memory"   = "24Gi"
+    }
+  }
+  depends_on = [ helm_release.kafka ]
+}
+
+resource "kubernetes_namespace" "ns4" {
+  metadata {
+    labels = {
+      namespace = "ns4"
+    }
+
+    name = "ns4"
+  }
+  depends_on = [null_resource.dependency]
+}
+
+resource "kubernetes_resource_quota" "ns4" {
+  metadata {
+    name      = var.nsquota
+    namespace = kubernetes_namespace.ns4.metadata[0].name
+  }
+
+  spec {
+    hard = {
+      "requests.cpu"    = "0.5"
+      "requests.memory" = "2Gi"
+      "limits.cpu"      = "2"
+      "limits.memory"   = "8Gi"
+    }
+  }
+  depends_on = [ helm_release.kafka ]
 }
