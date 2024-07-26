@@ -240,3 +240,36 @@ variable "token" {
   description = "A map of the secret data"
   type        = string
 }
+
+variable "dockerhub_email" {
+  type    = string
+  default = "challagulla.l@northeastern.edu"
+}
+
+variable "dockerhub_password" {
+  type = string
+}
+
+variable "dockerhub_username" {
+  type    = string
+  default = "chlokesh1306"
+}
+
+variable "registry_server" {
+  type    = string
+  default = "https://index.docker.io/v2/"
+}
+
+variable "gh_token" {
+  type    = string
+}
+
+variable "service_account_name" {
+  type    = string
+  default = "cluster-autoscaler"
+}
+
+variable "nsquota" {
+  type    = string
+  default = "nsquota"
+}

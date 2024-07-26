@@ -12,14 +12,9 @@ broker:
     accessModes:
       - ReadWriteOnce
     size: 50Gi
-  resourcesPreset: "xlarge"
+  resourcesPreset: "large"
   readinessProbe:
     initialDelaySeconds: 60
-  autoscaling:
-    hpa:
-      enabled: true
-      minReplicas: 3
-      maxReplicas: 6
 
 controller:      
   replicaCount: 2
@@ -29,14 +24,9 @@ controller:
     accessModes:
       - ReadWriteOnce
     size: 100Gi
-  resourcesPreset: "xlarge"
+  resourcesPreset: "large"
   readinessProbe:
     initialDelaySeconds: 5
-  autoscaling:
-    hpa:
-      enabled: true
-      minReplicas: 2
-      maxReplicas: 3
 
 listeners:
   client:
