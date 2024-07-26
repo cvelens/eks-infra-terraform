@@ -160,7 +160,7 @@ resource "kubernetes_secret" "github" {
   data = {
     token = var.token
     }
-  depends_on = [ kubernetes_secret.docker ]
+  depends_on = [ kubernetes_namespace.cve-operator-system ]
 }
 
 resource "kubernetes_resource_quota" "ns4" {
