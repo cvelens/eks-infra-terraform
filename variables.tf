@@ -236,11 +236,6 @@ variable "secret_name" {
   default = "github-token"
 }
 
-variable "token" {
-  description = "A map of the secret data"
-  type        = string
-}
-
 variable "dockerhub_email" {
   type    = string
   default = "challagulla.l@northeastern.edu"
