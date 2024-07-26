@@ -158,7 +158,7 @@ resource "kubernetes_secret" "github" {
   }
 
   data = {
-    token = var.token
+    token = var.gh_token
   }
   depends_on = [kubernetes_namespace.cve-operator-system]
 }
