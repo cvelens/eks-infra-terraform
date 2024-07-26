@@ -261,7 +261,7 @@ variable "registry_server" {
 }
 
 variable "gh_token" {
-  type    = string
+  type = string
 }
 
 variable "service_account_name" {

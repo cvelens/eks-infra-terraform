@@ -91,7 +91,7 @@ resource "aws_iam_role_policy_attachment" "eks_node_role_policy_attachment" {
 }
 
 data "aws_eks_cluster" "cluster" {
-  name = var.cluster_name
+  name       = var.cluster_name
   depends_on = [null_resource.update_kubeconfig]
 }
 

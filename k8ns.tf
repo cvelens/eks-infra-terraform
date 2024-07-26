@@ -70,7 +70,7 @@ resource "kubernetes_resource_quota" "ns1" {
       "limits.memory"   = "24Gi"
     }
   }
-  depends_on = [ helm_release.kafka ]
+  depends_on = [helm_release.kafka]
 }
 
 resource "kubernetes_namespace" "ns2" {
@@ -98,7 +98,7 @@ resource "kubernetes_resource_quota" "ns2" {
       "limits.memory"   = "30Gi"
     }
   }
-  depends_on = [ helm_release.kafka ]
+  depends_on = [helm_release.kafka]
 }
 
 resource "kubernetes_namespace" "ns3" {
@@ -120,7 +120,7 @@ resource "kubernetes_namespace" "cve-operator-system" {
 
     name = "cve-operator-system"
   }
-    depends_on = [null_resource.dependency]
+  depends_on = [null_resource.dependency]
 }
 
 resource "kubernetes_resource_quota" "ns3" {
@@ -137,7 +137,7 @@ resource "kubernetes_resource_quota" "ns3" {
       "limits.memory"   = "24Gi"
     }
   }
-  depends_on = [ helm_release.kafka ]
+  depends_on = [helm_release.kafka]
 }
 
 resource "kubernetes_namespace" "ns4" {
@@ -159,8 +159,8 @@ resource "kubernetes_secret" "github" {
 
   data = {
     token = var.token
-    }
-  depends_on = [ kubernetes_namespace.cve-operator-system ]
+  }
+  depends_on = [kubernetes_namespace.cve-operator-system]
 }
 
 resource "kubernetes_resource_quota" "ns4" {
@@ -177,5 +177,5 @@ resource "kubernetes_resource_quota" "ns4" {
       "limits.memory"   = "8Gi"
     }
   }
-  depends_on = [ helm_release.kafka ]
+  depends_on = [helm_release.kafka]
 }
