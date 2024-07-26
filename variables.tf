@@ -230,3 +230,13 @@ variable "chart_name" {
   type    = string
   default = "kafka"
 }
+
+variable "secret_name" {
+  type    = string
+  default = "github-token"
+}
+
+variable "token" {
+  description = "A map of the secret data"
+  type        = string
+}

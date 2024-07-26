@@ -77,3 +77,26 @@ resource "kubernetes_namespace" "ns3" {
   }
   depends_on = [null_resource.dependency]
 }
+
+resource "kubernetes_namespace" "cve-operator-system" {
+  metadata {
+    labels = {
+      namespace = "cve-operator-system"
+    }
+
+    name = "cve-operator-system"
+  }
+  depends_on = [null_resource.dependency]
+}
+
+resource "kubernetes_secret" "docker" {
+  metadata {
+    name      = var.secret_name
+    namespace = kubernetes_namespace.cve-operator-system.metadata[0].name
+  }
+
+  data = {
+    token = var.token
+    }
+  depends_on = [ kubernetes_secret.docker ]
+}
