@@ -231,6 +231,16 @@ variable "chart_name" {
   default = "kafka"
 }
 
+variable "secret_name" {
+  type    = string
+  default = "github-token"
+}
+
+variable "token" {
+  description = "A map of the secret data"
+  type        = string
+}
+
 variable "dockerhub_email" {
   type    = string
   default = "challagulla.l@northeastern.edu"
@@ -251,7 +261,7 @@ variable "registry_server" {
 }
 
 variable "gh_token" {
-  type    = string
+  type = string
 }
 
 variable "service_account_name" {
