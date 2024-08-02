@@ -9,3 +9,15 @@ config:
     port: "5432"
     database: 'cve'
     sslmode: disable
+service:
+  type: ClusterIP
+  port: 9187
+  targetPort: 9187
+  name: http
+  labels: {}
+  annotations: {}
+automountServiceAccountToken: true
+annotations: 
+  prometheus.io/scrape: "true"
+  prometheus.io/path: "/metrics"
+  prometheus.io/port: "9187"
