@@ -23,6 +23,8 @@ provider "kubernetes" {
       AWS_PROFILE = var.profile
     }
   }
+  config_path    = "~/.kube/config"
+  config_context = "arn:aws:eks:us-east-1:385861399472:cluster/csye7125_cluster"
 }
 
 provider "helm" {
@@ -42,13 +44,16 @@ provider "helm" {
         AWS_PROFILE = var.profile
       }
     }
+    config_path    = "~/.kube/config"
+    config_context = "arn:aws:eks:us-east-1:385861399472:cluster/csye7125_cluster"
   }
 }
 
 resource "kubernetes_namespace" "ns1" {
   metadata {
     labels = {
-      namespace = "ns1"
+      namespace       = "ns1"
+      istio-injection = "enabled"
     }
 
     name = "ns1"
@@ -76,7 +81,8 @@ resource "kubernetes_resource_quota" "ns1" {
 resource "kubernetes_namespace" "ns2" {
   metadata {
     labels = {
-      namespace = "ns2"
+      namespace       = "ns2"
+      istio-injection = "enabled"
     }
 
     name = "ns2"
@@ -104,7 +110,8 @@ resource "kubernetes_resource_quota" "ns2" {
 resource "kubernetes_namespace" "ns3" {
   metadata {
     labels = {
-      namespace = "ns3"
+      namespace       = "ns3"
+      istio-injection = "enabled"
     }
 
     name = "ns3"
@@ -115,7 +122,8 @@ resource "kubernetes_namespace" "ns3" {
 resource "kubernetes_namespace" "cve-operator-system" {
   metadata {
     labels = {
-      namespace = "cve-operator-system"
+      namespace       = "cve-operator-system"
+      istio-injection = "enabled"
     }
 
     name = "cve-operator-system"
@@ -143,10 +151,35 @@ resource "kubernetes_resource_quota" "ns3" {
 resource "kubernetes_namespace" "ns4" {
   metadata {
     labels = {
-      namespace = "ns4"
+      namespace       = "ns4"
+      istio-injection = "enabled"
     }
 
     name = "ns4"
+  }
+  depends_on = [null_resource.dependency]
+}
+
+resource "kubernetes_namespace" "istio" {
+  metadata {
+    labels = {
+      namespace       = "istio"
+      istio-injection = "enabled"
+    }
+
+    name = "istio-system"
+  }
+  depends_on = [null_resource.dependency]
+}
+
+resource "kubernetes_namespace" "istio_gw" {
+  metadata {
+    labels = {
+      namespace       = "istio-ingress"
+      istio-injection = "enabled"
+    }
+
+    name = "istio-ingress"
   }
   depends_on = [null_resource.dependency]
 }
@@ -178,4 +211,16 @@ resource "kubernetes_resource_quota" "ns4" {
     }
   }
   depends_on = [helm_release.kafka]
+}
+
+resource "kubernetes_namespace" "monitoring" {
+  metadata {
+    labels = {
+      namespace       = "monitoring"
+      istio-injection = "enabled"
+    }
+
+    name = "monitoring"
+  }
+  depends_on = [null_resource.dependency]
 }

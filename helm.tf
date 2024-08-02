@@ -6,7 +6,7 @@ resource "helm_release" "kafka" {
   chart      = var.chart_name
   values     = [file("kafka-config.yaml")]
   namespace  = kubernetes_namespace.ns2.metadata[0].name
-  depends_on = [kubernetes_namespace.ns2, null_resource.apply_metrics_server]
+  depends_on = [kubernetes_namespace.ns2, null_resource.apply_metrics_server, helm_release.istio_ingress]
 }
 
 resource "kubernetes_secret" "dockerhub" {
@@ -43,5 +43,39 @@ resource "null_resource" "helm_install" {
       GITHUB_TOKEN = var.gh_token
     }
   }
-  depends_on = [null_resource.update_kubeconfig]
+  depends_on = [null_resource.update_kubeconfig, helm_release.istio_ingress]
+}
+
+resource "helm_release" "istio_base" {
+  name       = "istio-base"
+  repository = "https://istio-release.storage.googleapis.com/charts"
+  chart      = "base"
+  namespace  = kubernetes_namespace.istio.metadata[0].name
+  depends_on = [kubernetes_namespace.istio]
+}
+
+resource "helm_release" "istiod" {
+  name       = "istiod"
+  repository = "https://istio-release.storage.googleapis.com/charts"
+  chart      = "istiod"
+  namespace  = kubernetes_namespace.istio.metadata[0].name
+  values     = [file("./istio_custom.yaml")]
+  depends_on = [kubernetes_namespace.istio, helm_release.istio_base]
+}
+
+resource "helm_release" "istio_ingress" {
+  name       = "istio-ingressgateway"
+  repository = "https://istio-release.storage.googleapis.com/charts"
+  chart      = "gateway"
+  namespace  = kubernetes_namespace.istio_gw.metadata[0].name
+  depends_on = [kubernetes_namespace.istio_gw, helm_release.istiod]
+  values = [
+    yamlencode({
+      gateways = {
+        istio-ingressgateway = {
+          type = "LoadBalancer"
+        }
+      }
+    })
+  ]
 }
