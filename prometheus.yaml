@@ -15,5 +15,4 @@ server:
         - targets: ['kafka-broker-headless.ns2.svc.cluster.local:5556'] 
     - job_name: 'postgres'
       static_configs:
-        - targets: ['postgres-exporter-prometheus-postgres-exporter.monitoring.svc.cluster.local:80']
-      metrics_path: /metrics
+        - targets: ['postgres-exporter-prometheus-postgres-exporter.monitoring.svc.cluster.local:9187']
