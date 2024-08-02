@@ -152,3 +152,8 @@ resource "aws_iam_role_policy_attachment" "cluster_autoscaler_attach" {
   policy_arn = aws_iam_policy.cluster_autoscaler_policy.arn
   role       = aws_iam_role.cluster_autoscaler_role.name
 }
+
+resource "aws_iam_role_policy_attachment" "cloudwatch_logs_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
+  role       = aws_iam_role.node_role.name
+}
