@@ -45,13 +45,14 @@ module "eks" {
   cluster_enabled_log_types = var.log_types
   eks_managed_node_groups = {
     csye7125_node_group = {
-      name            = var.node_group_name
-      create_iam_role = false
-      iam_role_arn    = aws_iam_role.node_role.arn
-      instance_types  = var.instance_types[*]
-      min_size        = var.min_size
-      max_size        = var.max_size
-      desired_size    = var.desired_size
+      name                   = var.node_group_name
+      create_iam_role        = false
+      iam_role_arn           = aws_iam_role.node_role.arn
+      instance_types         = var.instance_types[*]
+      min_size               = var.min_size
+      max_size               = var.max_size
+      desired_size           = var.desired_size
+      vpc_security_group_ids = [aws_security_group.node.id]
       update_config = {
         max_unavailable = var.max_unavailable_number
       }

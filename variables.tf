@@ -93,6 +93,24 @@ variable "aws_node_security_group_name" {
   default = "node"
 }
 
+variable "node_ingress_rules" {
+  type = list(object({
+    from_port   = number
+    to_port     = number
+    protocol    = string
+    description = string
+  }))
+
+  default = [
+    {
+      from_port   = 1024
+      to_port     = 65535
+      protocol    = "TCP"
+      description = "All Inbound"
+    }
+  ]
+}
+
 variable "node_egress_rules" {
   type = list(object({
     from_port   = number

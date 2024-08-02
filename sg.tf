@@ -44,3 +44,14 @@ resource "aws_security_group_rule" "node_egress" {
   description       = var.node_egress_rules[count.index].description
   security_group_id = aws_security_group.node.id
 }
+
+resource "aws_security_group_rule" "node_ingress" {
+  type                     = "ingress"
+  count                    = length(var.node_ingress_rules)
+  from_port                = var.node_ingress_rules[count.index].from_port
+  to_port                  = var.node_ingress_rules[count.index].to_port
+  protocol                 = var.node_ingress_rules[count.index].protocol
+  source_security_group_id = aws_security_group.cluster.id
+  security_group_id        = aws_security_group.node.id
+  description              = var.node_ingress_rules[count.index].description
+}
