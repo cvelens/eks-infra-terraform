@@ -15,7 +15,7 @@ resource "helm_release" "postgres_exporter" {
   chart      = "prometheus-postgres-exporter"
   namespace  = kubernetes_namespace.monitoring.metadata[0].name
   depends_on = [kubernetes_namespace.monitoring, null_resource.apply_metrics_server, helm_release.istio_ingress]
-    values = [
+  values = [
     file("postgres.yaml")
   ]
 }

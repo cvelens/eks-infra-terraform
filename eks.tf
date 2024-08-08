@@ -9,7 +9,7 @@ module "eks" {
   create_iam_role                 = false
   create_kms_key                  = false
   create_cluster_security_group   = false
-  
+
   cluster_enabled_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
 
   cluster_addons = {
@@ -43,7 +43,7 @@ module "eks" {
   cluster_encryption_config = { "resources" : ["secrets"]
     provider_key_arn = aws_kms_key.eks.arn
   }
-  cluster_ip_family         = var.family
+  cluster_ip_family = var.family
 
   eks_managed_node_groups = {
     csye7125_node_group = {

@@ -19,6 +19,16 @@ broker:
   resourcesPreset: "large"
   readinessProbe:
     initialDelaySeconds: 60
+  autoscaling:
+    hpa:
+      enabled: true
+      minReplicas: 3
+      maxReplicas: 6
+      targetCPU: 80
+      targetCPU: 80
+  pdb:
+    create: true
+    minAvailable: 1
 
 controller:      
   replicaCount: 2
@@ -31,6 +41,16 @@ controller:
   resourcesPreset: "large"
   readinessProbe:
     initialDelaySeconds: 5
+  autoscaling:
+    hpa:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 3
+      targetCPU: 80
+      targetCPU: 80
+  pdb:
+    create: true
+    minAvailable: 1
 
 listeners:
   client:

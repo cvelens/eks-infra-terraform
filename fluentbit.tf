@@ -26,7 +26,7 @@ resource "kubernetes_daemonset" "fluentbit" {
         container {
           name  = "fluentbit"
           image = "amazon/aws-for-fluent-bit:2.31.11"
-          
+
           resources {
             limits = {
               memory = "200Mi"
