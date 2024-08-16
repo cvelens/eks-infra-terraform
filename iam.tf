@@ -157,3 +157,26 @@ resource "aws_iam_role_policy_attachment" "cloudwatch_logs_policy" {
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
   role       = aws_iam_role.node_role.name
 }
+
+
+resource "aws_iam_policy" "external_dns_policy" {
+  name = "external-dns-policy"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect = "Allow",
+      Action = [
+        "route53:ChangeResourceRecordSets",
+        "route53:ListResourceRecordSets",
+        "route53:ListHostedZones"
+      ],
+      Resource = "*"
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "external_dns_attachment" {
+  role       = aws_iam_role.node_role.name
+  policy_arn = aws_iam_policy.external_dns_policy.arn
+}
