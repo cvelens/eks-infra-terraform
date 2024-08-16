@@ -89,7 +89,7 @@ resource "null_resource" "update_kubeconfig" {
     EOT
   }
 
-  depends_on = [kubernetes_namespace.ns2]
+  depends_on = [module.eks]
 }
 
 resource "null_resource" "dependency" {
