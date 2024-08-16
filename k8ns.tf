@@ -24,7 +24,6 @@ provider "kubernetes" {
     }
   }
   config_path    = "~/.kube/config"
-  config_context = "arn:aws:eks:us-east-1:385861399472:cluster/csye7125_cluster"
 }
 
 provider "helm" {
@@ -45,7 +44,6 @@ provider "helm" {
       }
     }
     config_path    = "~/.kube/config"
-    config_context = "arn:aws:eks:us-east-1:385861399472:cluster/csye7125_cluster"
   }
 }
 
@@ -141,8 +139,8 @@ resource "kubernetes_resource_quota" "ns3" {
     hard = {
       "requests.cpu"    = "2"
       "requests.memory" = "4Gi"
-      "limits.cpu"      = "8"
-      "limits.memory"   = "24Gi"
+      "limits.cpu"      = "12"
+      "limits.memory"   = "36Gi"
     }
   }
   depends_on = [helm_release.kafka]
@@ -223,4 +221,33 @@ resource "kubernetes_namespace" "monitoring" {
     name = "monitoring"
   }
   depends_on = [null_resource.dependency]
+}
+
+resource "kubernetes_namespace" "cve-generator" {
+  metadata {
+    labels = {
+      namespace       = "cve-generator"
+      istio-injection = "enabled"
+    }
+
+    name = "cve-generator"
+  }
+  depends_on = [null_resource.dependency]
+}
+
+resource "kubernetes_resource_quota" "cve-generator" {
+  metadata {
+    name      = var.nsquota
+    namespace = kubernetes_namespace.cve-generator.metadata[0].name
+  }
+
+  spec {
+    hard = {
+      "requests.cpu"    = "1"
+      "requests.memory" = "2Gi"
+      "limits.cpu"      = "2"
+      "limits.memory"   = "8Gi"
+    }
+  }
+  depends_on = [helm_release.kafka]
 }

@@ -31,6 +31,72 @@ resource "kubernetes_secret" "dockerhub" {
   }
 }
 
+resource "kubernetes_secret" "ns3" {
+  metadata {
+    name      = "dockerhub-secret"
+    namespace = kubernetes_namespace.ns3.metadata[0].name
+  }
+
+  type = "kubernetes.io/dockerconfigjson"
+
+  data = {
+    ".dockerconfigjson" = jsonencode({
+      auths = {
+        "${var.registry_server}" = {
+          "username" = var.dockerhub_username
+          "password" = var.dockerhub_password
+          "email"    = var.dockerhub_email
+          "auth"     = base64encode("${var.dockerhub_username}:${var.dockerhub_password}")
+        }
+      }
+    })
+  }
+}
+
+resource "kubernetes_secret" "cve-generator" {
+  metadata {
+    name      = "dockerhub-secret"
+    namespace = kubernetes_namespace.cve-generator.metadata[0].name
+  }
+
+  type = "kubernetes.io/dockerconfigjson"
+
+  data = {
+    ".dockerconfigjson" = jsonencode({
+      auths = {
+        "${var.registry_server}" = {
+          "username" = var.dockerhub_username
+          "password" = var.dockerhub_password
+          "email"    = var.dockerhub_email
+          "auth"     = base64encode("${var.dockerhub_username}:${var.dockerhub_password}")
+        }
+      }
+    })
+  }
+}
+
+resource "kubernetes_secret" "cve-operator" {
+  metadata {
+    name      = "dockerhub-secret"
+    namespace = kubernetes_namespace.cve-operator-system.metadata[0].name
+  }
+
+  type = "kubernetes.io/dockerconfigjson"
+
+  data = {
+    ".dockerconfigjson" = jsonencode({
+      auths = {
+        "${var.registry_server}" = {
+          "username" = var.dockerhub_username
+          "password" = var.dockerhub_password
+          "email"    = var.dockerhub_email
+          "auth"     = base64encode("${var.dockerhub_username}:${var.dockerhub_password}")
+        }
+      }
+    })
+  }
+}
+
 resource "null_resource" "helm_install" {
   provisioner "local-exec" {
     command = <<EOT
