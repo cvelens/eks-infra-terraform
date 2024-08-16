@@ -286,3 +286,8 @@ variable "nsquota" {
   type    = string
   default = "nsquota"
 }
+
+variable "zoneid" {
+  type    = string
+  default = "Z10006183PYUA39MAOC71"
+}
