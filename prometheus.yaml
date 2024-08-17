@@ -16,3 +16,6 @@ server:
     - job_name: 'postgres'
       static_configs:
         - targets: ['postgres-exporter-prometheus-postgres-exporter.monitoring.svc.cluster.local:9187']
+    - job_name: 'cve-generator'
+      static_configs:
+        - targets: ['cve-query-service.cve-generator.svc.cluster.local:9090']

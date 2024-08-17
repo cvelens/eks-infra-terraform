@@ -234,20 +234,3 @@ resource "kubernetes_namespace" "cve-generator" {
   }
   depends_on = [null_resource.dependency]
 }
-
-resource "kubernetes_resource_quota" "cve-generator" {
-  metadata {
-    name      = var.nsquota
-    namespace = kubernetes_namespace.cve-generator.metadata[0].name
-  }
-
-  spec {
-    hard = {
-      "requests.cpu"    = "1"
-      "requests.memory" = "2Gi"
-      "limits.cpu"      = "2"
-      "limits.memory"   = "8Gi"
-    }
-  }
-  depends_on = [helm_release.kafka]
-}
