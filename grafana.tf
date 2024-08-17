@@ -6,7 +6,8 @@ resource "helm_release" "grafana" {
   depends_on = [
     data.local_file.custom_dashboard1,
     data.local_file.custom_dashboard2,
-    data.local_file.custom_dashboard3
+    data.local_file.custom_dashboard3,
+    data.local_file.custom_dashboard4
   ]
   values = [
     file("grafana.yaml"),
@@ -21,6 +22,9 @@ resource "helm_release" "grafana" {
           }
           custom_dashboard3 = {
             json = data.local_file.custom_dashboard3.content
+          }
+          custom_dashboard4 = {
+            json = data.local_file.custom_dashboard4.content
           }
         }
       }
@@ -38,5 +42,9 @@ data "local_file" "custom_dashboard2" {
 
 data "local_file" "custom_dashboard3" {
   filename = "dashboards/kafka.json"
+}
+
+data "local_file" "custom_dashboard4" {
+  filename = "dashboards/cve.json"
 }
 
